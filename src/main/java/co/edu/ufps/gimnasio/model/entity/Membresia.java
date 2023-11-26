@@ -16,7 +16,7 @@ public class Membresia {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nombre;
-	private String duracion;
+	private Integer duracion;
 	private Integer precio;
 	private String descripcion;
 

@@ -15,6 +15,7 @@ public class UsuarioDTO {
 	private String cedula;
 	private String telefono;
 	private String email;
+	private String foto;
 	private Date fechaNacimiento;
 	private Date fechaRegistro;
 	private boolean estado;

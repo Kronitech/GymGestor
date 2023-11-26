@@ -63,13 +63,13 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 			int n=membresiasActivas.size();
 			
 			fechaInicio=membresiasActivas.get(n-1).getFechaFin();
-			System.err.println(n+" fecha Inicio"+fechaInicio);
+			
 		}
 		Optional<Membresia> membresia=membresiaRepository.findById(usuarioMembresia.getMembresiaId());
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fechaInicio);
-		calendar.add(Calendar.DAY_OF_MONTH, 30); // Agrega 30 días a la fecha de inicio
+		calendar.add(Calendar.DAY_OF_MONTH, membresia.get().getDuracion()); // Agrega 30 días a la fecha de inicio
 		Date fechaFin = calendar.getTime();
 		usuarioMembresia.setFechaInicio(fechaInicio);
 		usuarioMembresia.setFechaFin(fechaFin);

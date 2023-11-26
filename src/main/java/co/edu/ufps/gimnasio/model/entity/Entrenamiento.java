@@ -13,7 +13,6 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="entrenamiento")
 public class Entrenamiento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +23,10 @@ public class Entrenamiento {
 	private Integer rutinaId;
 	@Column(name="ejercicio_id")
 	private Integer ejercicioId;
+	@Column(name="asistencia_id")
+	private Integer asistenciaId;
 	private Integer series;
-	private Integer repeciones;
+	private Integer repeticiones;
 	private Integer peso;
 	@Column(name="fecha_registro")
 	private Date fechaRegistro;

@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.edu.ufps.gimnasio.model.entity.Asistencia;
+import co.edu.ufps.gimnasio.model.entity.Usuario;
 import co.edu.ufps.gimnasio.repository.AsistenciaRepository;
+import co.edu.ufps.gimnasio.repository.UsuarioReporitory;
 import co.edu.ufps.gimnasio.service.AsistenciaService;
 
 @Service
@@ -18,6 +21,8 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Autowired
 	AsistenciaRepository asistenciaRepository;
+	@Autowired
+	UsuarioReporitory usuarioReporitory;
 
 	@Override
 	public List<Asistencia> lista() {
@@ -66,6 +71,15 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		}
 
 		return (asistentes);
+	}
+
+	@Override
+	public List<Asistencia> findByUsuarioId(Integer id) {
+		Optional<Usuario>usuario=usuarioReporitory.findById(id);
+		if(usuario.isPresent()) {
+			return asistenciaRepository.findByUsuarioId(id);
+		}
+		return null;
 	}
 
 }

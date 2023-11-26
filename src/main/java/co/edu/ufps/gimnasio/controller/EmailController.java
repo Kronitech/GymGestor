@@ -39,6 +39,24 @@ public class EmailController {
 		
 	}
 	
+	@GetMapping("/recuperar/{email}")
+	public ResponseEntity<?> correoBienvenida(@PathVariable String email){
+		
+		try {
+			if(mailService.recuperarClave(email)) {
+				return ResponseEntity.ok(true);
+			}else {
+				return ResponseEntity.status(HttpStatus.CONFLICT).body("no se puedo enviar el email");
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		
+		
+	}
+	
 	
 
 }

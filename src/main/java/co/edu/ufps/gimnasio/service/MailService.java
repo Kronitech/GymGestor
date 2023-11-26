@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import co.edu.ufps.gimnasio.model.entity.CodigoRecuperacion;
 import co.edu.ufps.gimnasio.model.entity.Usuario;
+import co.edu.ufps.gimnasio.repository.CodigoRecuperacionRepository;
 import co.edu.ufps.gimnasio.repository.UsuarioReporitory;
 
 @Service
@@ -31,6 +33,8 @@ public class MailService {
 	private TemplateEngine templateEngine;
 	@Autowired
 	UsuarioReporitory usuarioRepository;
+	@Autowired
+	CodigoRecuperacionRepository codigoRecuperacionRepository;
 
 	public boolean usuarioNuevo(Integer id ) throws MessagingException {
 
@@ -83,22 +87,20 @@ public class MailService {
 		int max = (int) Math.pow(10, longitud) - 1;
 		return random.nextInt(max - min + 1) + min;
 	}
-	/*
-	public boolean recuperarClave(Usuario preRegistro) throws MessagingException {
+	
+	public boolean recuperarClave(String email) throws MessagingException {
 
 		try {
 			// BUSCAMOS EL USUARIO POR CORREO
-			Optional<Usuario> usuario = usuarioRepository.findByEmail(preRegistro.getEmail());
+			Optional<Usuario> usuario = usuarioRepository.findByEmail(email.toUpperCase());
 			if (usuario.isPresent()) {
-
 				MimeMessage mimeMessageHelpe = javaMailSender.createMimeMessage();
 				MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessageHelpe, "UTF-8");
 				// GENERO CODIGO DE REGISTRO
 				int codigo = generarCodigo(6);
-				preRegistro.setPassword(codigo + "");
-				preRegistro.setNombre(usuario.get().getNombre() + " " + usuario.get().getApellido());
+				usuario.get().setPassword(codigo+"");
 				// TITULO DEL EMAIL
-				String titulo = "DAFACI";
+				String titulo = "SMART FIT";
 				// DESCRIPCION
 				String detalle = "El siguiente codigo es para completar el proceso de recuperar contraseña y  habilitar su cuenta ";
 				// FECHA GENERA EL EMAIL
@@ -111,29 +113,24 @@ public class MailService {
 				Context context = new Context();
 				context.setVariable("titulo", titulo);
 				context.setVariable("detalle", detalle);
-				context.setVariable("docente", preRegistro);
+				context.setVariable("docente", usuario.get());
 				context.setVariable("fecha", fechaFormateada);
 				String htmlContent = templateEngine.process("email-password", context);
-				messageHelper.setTo(preRegistro.getEmail());
-				messageHelper.setSubject("RECUPERAR CONTRASEÑA DAFACI ");
-				// messageHelper.setFrom("MENSAJE DE BIENVENIDA");
+				messageHelper.setTo(usuario.get().getEmail());
+				messageHelper.setSubject("RECUPERAR CONTRASEÑA  ");
 				messageHelper.setText(htmlContent, true);
 				// CREO OBJ CODIGOREGISTRO
-				// VVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 				// Genera un token único
-				String token = UUID.randomUUID().toString();
+				//String token = UUID.randomUUID().toString();
 
-				CodigoPassword codigoRegistro = new CodigoPassword();
+				CodigoRecuperacion codigoRegistro = new CodigoRecuperacion();
 				codigoRegistro.setUsuarioId(usuario.get().getId());
 				codigoRegistro.setCodigo(codigo);
 				codigoRegistro.setFechaRegistro(fecha);
-				codigoRegistro.setEmail(preRegistro.getEmail());
-				codigoRegistro.setMensaje(token);
-
-				CodigoPassword codigoCurrent = codigoPasswordRepository.save(codigoRegistro);
-				Optional<CodigoPassword> codigoReturn = codigoPasswordRepository.findById(codigoCurrent.getId());
-
-				if (codigoReturn.isPresent()) {
+				codigoRegistro.setEstado(false);
+				CodigoRecuperacion codigoReturn= codigoRecuperacionRepository.save(codigoRegistro);
+				
+				if (codigoReturn!=null) {
 					javaMailSender.send(mimeMessageHelpe);
 					return true;
 				}
@@ -145,6 +142,6 @@ public class MailService {
 			return false;
 		}
 	}
-	*/
+	
 
 }

@@ -37,6 +37,14 @@ public class AsistenciaController {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error obtener asistencias");
 		}
 	}
+	@GetMapping("/cliente/{id}")
+	public ResponseEntity<?> asistentenClienteById(@PathVariable Integer id){
+		try {
+			return ResponseEntity.ok(asistenciaService.findByUsuarioId(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Error obtener asistencias");
+		}
+	}
 	@GetMapping("/registrada/{id}")
 	public ResponseEntity<?> asistenciaRegistrada(@PathVariable Integer id){
 		try {

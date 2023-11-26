@@ -30,6 +30,8 @@ public class Usuario {
 	private String cedula;
 	private String telefono;
 	private String email;
+	@Column(nullable = true)
+	private String foto;
 	private String password;
 	@Column(name="fecha_nacimiento")
 	private Date fechaNacimiento;

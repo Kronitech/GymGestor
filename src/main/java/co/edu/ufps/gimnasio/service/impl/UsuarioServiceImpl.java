@@ -1,5 +1,6 @@
 package co.edu.ufps.gimnasio.service.impl;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import co.edu.ufps.gimnasio.model.dto.UsuarioDTO;
 import co.edu.ufps.gimnasio.model.entity.Entrenador;
@@ -18,6 +20,7 @@ import co.edu.ufps.gimnasio.repository.EntrenadorRepository;
 import co.edu.ufps.gimnasio.repository.RolRepository;
 import co.edu.ufps.gimnasio.repository.RolUsuarioRepository;
 import co.edu.ufps.gimnasio.repository.UsuarioReporitory;
+import co.edu.ufps.gimnasio.service.AWSS3Service;
 import co.edu.ufps.gimnasio.service.UsuarioService;
 @Service
 public class UsuarioServiceImpl  implements UsuarioService{
@@ -30,10 +33,14 @@ public class UsuarioServiceImpl  implements UsuarioService{
 	RolUsuarioRepository rolUsuarioRepository;
 	@Autowired
 	EntrenadorRepository entrenadorReposiotry;
+	
+	@Autowired
+	AWSS3Service awss3Service;
+	
 	@Autowired
 	ModelMapper modelMapper;
 	
-
+	
 	@Override
 	public List<Usuario> listaUsuarios() {
 		return usuarioReporitory.findAll();
@@ -115,6 +122,36 @@ public class UsuarioServiceImpl  implements UsuarioService{
 			rolUsuario.setUsuario(usuarioReturn);
 			rolUsuarioRepository.save(rolUsuario);
 			return modelMapper.map(usuarioReturn, UsuarioDTO.class);
+		}
+		return null;
+	}
+
+	@Override
+	public InputStream downloadImagenPerfil(Integer usuarioId, String key) {
+		// TODO Auto-generated method stub
+		Optional<Usuario>usuario=usuarioReporitory.findById(usuarioId);
+		if(usuario.isPresent()) {
+			String ruta="GIMNASIO/PERFIL/"+usuario.get().getId()+"/";
+			return awss3Service.downloadFile(ruta, key);
+		}
+		return null;
+	}
+
+	@Override
+	public UsuarioDTO createFolderByIdUsuario(Integer id, MultipartFile file) {
+		// TODO Auto-generated method stub
+		Optional<Usuario>usuario=usuarioReporitory.findById(id);
+		if(usuario.isPresent()) {
+			String ruta="GIMNASIO/PERFIL/"+usuario.get().getId()+"/";
+			if(usuario.get().getFoto()!=null) {
+				awss3Service.deleteFile(ruta, usuario.get().getFoto());
+			}
+			String key=awss3Service.createFolderFile(ruta, file);
+			
+			usuario.get().setFoto(key);
+			Usuario usuarioReturn=usuarioReporitory.save(usuario.get());
+			return modelMapper.map(usuarioReturn, UsuarioDTO.class);
+			
 		}
 		return null;
 	}

@@ -16,5 +16,7 @@ public interface AsistenciaService {
 	public Asistencia updateAsistencia(Asistencia asistencia);
 	
 	public List<Integer> datosAsistencia();
+	
+	public List<Asistencia>findByUsuarioId(Integer id);
 
 }

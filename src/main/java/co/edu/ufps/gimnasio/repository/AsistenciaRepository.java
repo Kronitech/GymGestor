@@ -19,4 +19,6 @@ public interface AsistenciaRepository  extends JpaRepository<Asistencia, Integer
     
     @Query("SELECT COUNT(a) FROM Asistencia a WHERE a.fechaRegistro = :fecha AND a.hora = :hora")
     int contarRegistrosPorFechaYHora(@Param("fecha") String fecha, @Param("hora") Integer hora);
+    
+    List<Asistencia> findByUsuarioId(Integer usuarioId);
 }

@@ -41,10 +41,12 @@ public class JwtTokenProvider {
 		Optional<Usuario>usuario=usuarioRepository.findByEmail(username);
 		Map<String, Object>extra=new HashMap<>();
 		extra.put("nombre",usuario.get().getNombre());
+		extra.put("foto", usuario.get().getFoto());
+		extra.put("email", usuario.get().getEmail());
 		extra.put("roles", usuario.get().getRoles());
 		extra.put("id", usuario.get().getId());
-		extra.put("fechaNacimiento", usuario.get().getFechaNacimiento());
-
+		extra.put("fechaNacimiento", usuario.get().getFechaNacimiento().toString());
+		extra.put("telefono", usuario.get().getTelefono());
 		extra.put("cedula", usuario.get().getCedula());
 		String token = Jwts.builder()
 				.setSubject(username)

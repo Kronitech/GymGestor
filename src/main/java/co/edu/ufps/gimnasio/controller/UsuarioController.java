@@ -1,6 +1,9 @@
 package co.edu.ufps.gimnasio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import co.edu.ufps.gimnasio.model.entity.Usuario;
 import co.edu.ufps.gimnasio.service.UsuarioService;
@@ -78,6 +83,27 @@ public class UsuarioController {
 			
 		}
 		
+	}
+	
+	@PostMapping("/perfil/upload/{id}")
+	public ResponseEntity<?> uploadImagenPerfil(@PathVariable Integer id,
+			@RequestPart(value = "file") MultipartFile file) {
+		try {
+
+			return ResponseEntity.ok(usuarioService.createFolderByIdUsuario(id, file));
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+		}
+	}
+
+	@GetMapping(value = "/download/{id}")
+	public ResponseEntity<Resource> downloadImagenPerfil(@PathVariable Integer id,
+			@RequestParam("key") String key) {
+		InputStreamResource resource = new InputStreamResource(
+				usuarioService.downloadImagenPerfil(id, key));
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + key + "\"")
+				.body(resource);
 	}
 	
 
