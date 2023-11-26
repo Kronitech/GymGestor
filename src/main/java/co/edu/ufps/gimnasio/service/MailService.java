@@ -45,7 +45,7 @@ public class MailService {
 				// TITULO DEL EMAIL
 				String titulo = "SMART FIT";
 				// DESCRIPCION
-				String detalle = "Bienvenido , su membresia se activo con exito ya puedes iniciar sesion en nuestro sitio web ";
+				String detalle = "Bienvenido , su cuenta se activo con exito ya puedes iniciar sesion en nuestro sitio web ";
 				// FECHA GENERA EL EMAIL
 				Date fecha = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("EEEE d 'de' MMMM 'de' yyyy", new Locale("es"));

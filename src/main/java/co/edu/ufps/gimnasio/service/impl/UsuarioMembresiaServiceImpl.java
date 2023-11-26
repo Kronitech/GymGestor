@@ -3,8 +3,10 @@ package co.edu.ufps.gimnasio.service.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -17,7 +19,7 @@ import co.edu.ufps.gimnasio.model.entity.Entrenador;
 import co.edu.ufps.gimnasio.model.entity.Membresia;
 import co.edu.ufps.gimnasio.model.entity.Usuario;
 import co.edu.ufps.gimnasio.model.entity.UsuarioMembresia;
-import co.edu.ufps.gimnasio.repository.EntrenadorReposiotry;
+import co.edu.ufps.gimnasio.repository.EntrenadorRepository;
 import co.edu.ufps.gimnasio.repository.MembresiaRepository;
 import co.edu.ufps.gimnasio.repository.UsuarioMembresiaRepository;
 import co.edu.ufps.gimnasio.repository.UsuarioReporitory;
@@ -31,7 +33,7 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 	@Autowired
 	MembresiaRepository membresiaRepository;
 	@Autowired
-	EntrenadorReposiotry entrenadorReposiotry;
+	EntrenadorRepository entrenadorReposiotry;
 	@Autowired
 	UsuarioReporitory usuarioReporitory;
 	@Autowired
@@ -108,8 +110,8 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 	@Override
 	public UsuarioMembresiaDTO findByCedulaUsuario(String  cedula) {
 		Optional<Usuario>usuario=usuarioReporitory.findByCedula(cedula);
-		if(usuario.isPresent()) {
-			
+		if(usuario.isPresent() && usuario.get().getRoles().stream()
+	            .anyMatch(rol -> rol.getId() == 2) ) {
 			UsuarioMembresiaDTO usuarioMembresiaDTO=new UsuarioMembresiaDTO();
 			usuarioMembresiaDTO.setUsuario(modelMapper.map(usuario.get(), UsuarioDTO.class));
 			usuarioMembresiaDTO.setUsuarioMembresias(membresiasActivas(usuario.get().getId()));
@@ -141,6 +143,43 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 		return null;
 
 	}
+
+	@Override
+	public List<UsuarioDTO> listaClientesEntrenador(Integer id) {
+	    Optional<Entrenador> entrenador = entrenadorReposiotry.findByUsuarioId(id);
+	    if (entrenador.isPresent()) {
+	        List<UsuarioMembresia> membresias = usuarioMembresiaRepository.findUsuariosMembresiaByFechaFin(new Date());
+	        List<UsuarioMembresia> membresiasDelEntrenador = membresias.stream()
+	            .filter(m -> m.getEntrenadorId() != null && m.getEntrenadorId().equals(entrenador.get().getId()))
+	            .collect(Collectors.toList());
+
+	        List<UsuarioDTO> usuarios = new ArrayList<>();
+	        Set<Integer> usuariosAgregados = new HashSet<>();  // Usamos un conjunto para verificar duplicados
+
+	        for (UsuarioMembresia usuarioMembresia : membresiasDelEntrenador) {
+	            Optional<Usuario> usuario = usuarioReporitory.findById(usuarioMembresia.getUsuarioId());
+	            if (usuario.isPresent()) {
+	                Integer usuarioId = usuario.get().getId();
+	                // Verificar si el usuario ya ha sido agregado a la lista
+	                if (!usuariosAgregados.contains(usuarioId)) {
+	                    UsuarioDTO usuarioDTO = modelMapper.map(usuario.get(), UsuarioDTO.class);
+	                    usuarios.add(usuarioDTO);
+	                    usuariosAgregados.add(usuarioId);  // Agregar el ID del usuario al conjunto de usuarios agregados
+	                }
+	            }
+	        }
+
+	        return usuarios;
+	    }
+	    return null;
+	}
+
+	@Override
+	public List<UsuarioMembresia> membresiasUsuarioById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	
 

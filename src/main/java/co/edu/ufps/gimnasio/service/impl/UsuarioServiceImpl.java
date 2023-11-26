@@ -14,7 +14,7 @@ import co.edu.ufps.gimnasio.model.entity.Entrenador;
 import co.edu.ufps.gimnasio.model.entity.Rol;
 import co.edu.ufps.gimnasio.model.entity.RolUsuario;
 import co.edu.ufps.gimnasio.model.entity.Usuario;
-import co.edu.ufps.gimnasio.repository.EntrenadorReposiotry;
+import co.edu.ufps.gimnasio.repository.EntrenadorRepository;
 import co.edu.ufps.gimnasio.repository.RolRepository;
 import co.edu.ufps.gimnasio.repository.RolUsuarioRepository;
 import co.edu.ufps.gimnasio.repository.UsuarioReporitory;
@@ -29,7 +29,7 @@ public class UsuarioServiceImpl  implements UsuarioService{
 	@Autowired
 	RolUsuarioRepository rolUsuarioRepository;
 	@Autowired
-	EntrenadorReposiotry entrenadorReposiotry;
+	EntrenadorRepository entrenadorReposiotry;
 	@Autowired
 	ModelMapper modelMapper;
 	
@@ -105,6 +105,7 @@ public class UsuarioServiceImpl  implements UsuarioService{
 	public UsuarioDTO saveUsuarios(Usuario usuario,Integer id) {
 		Optional<Rol>rol=rolRepository.findById(id);
 		if(rol.isPresent()) {
+			usuario.setEmail(usuario.getEmail().toUpperCase());
 			usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getCedula()));
 			usuario.setFechaRegistro(new Date());
 			usuario.setEstado(true);

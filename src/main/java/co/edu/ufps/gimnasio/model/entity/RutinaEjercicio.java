@@ -19,7 +19,7 @@ public class RutinaEjercicio {
 	@Column(name="rutina_id")
 	private Integer rutinaId;
 	@Column(name="ejercicio_id")
-	private Integer ejercicoId;
+	private Integer ejercicioId;
 	
 
 }

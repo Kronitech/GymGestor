@@ -43,6 +43,15 @@ public class UsuarioMembresiaController {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No se encontro listado");
 		}
 	}
+	@PreAuthorize("hasAnyRole('ADMIN' , 'ENTRENADOR')")
+	@GetMapping("/activa/{usuarioId}/entrenador")
+	public ResponseEntity<?> membresiasActivasEntrenador (@PathVariable Integer usuarioId){
+		try {
+			return ResponseEntity.ok(usuarioMembresiaService.listaClientesEntrenador(usuarioId));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No se encontro listado");
+		}
+	}
 	@PreAuthorize("hasAnyRole('ADMIN' , 'RECEPCIONISTA','CLIENTE')")
 	@GetMapping("/cedula/{cedula}")
 	public ResponseEntity<?> usuarioMembresiaFindByCedula (@PathVariable String cedula){

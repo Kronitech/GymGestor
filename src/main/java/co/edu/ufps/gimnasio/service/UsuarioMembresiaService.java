@@ -2,6 +2,7 @@ package co.edu.ufps.gimnasio.service;
 
 import java.util.List;
 
+import co.edu.ufps.gimnasio.model.dto.UsuarioDTO;
 import co.edu.ufps.gimnasio.model.dto.UsuarioMembresiaDTO;
 import co.edu.ufps.gimnasio.model.entity.UsuarioMembresia;
 
@@ -20,5 +21,8 @@ public interface UsuarioMembresiaService {
 	public List<UsuarioMembresia>membresiasActivas(Integer id);
 	
 	public UsuarioMembresiaDTO findByCedulaUsuario(String cedula);
-
+	
+	public List<UsuarioDTO> listaClientesEntrenador(Integer usuarioId);
+	
+	public List<UsuarioMembresia> membresiasUsuarioById(Integer id);
 }
