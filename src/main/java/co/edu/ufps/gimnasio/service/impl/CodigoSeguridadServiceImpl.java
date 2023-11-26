@@ -36,7 +36,7 @@ public class CodigoSeguridadServiceImpl implements CodigoRecuperacionService {
 		Optional<Usuario> usuario = usuarioReporitory.findByEmail(email.toUpperCase());
 		if (usuario.isPresent()) {
 			List<CodigoRecuperacion> codigos = codigoRecuperacionRepository.findByUsuarioId(usuario.get().getId());
-			System.err.println(codigos.size());
+			
 			if (!codigos.isEmpty()) {
 				int size = codigos.size();
 				if (codigos.get(size - 1).getCodigo().equals(codigoRecuperacion.getCodigo())) {
@@ -55,9 +55,11 @@ public class CodigoSeguridadServiceImpl implements CodigoRecuperacionService {
 	}
 
 	@Override
-	public boolean cambiarPassword(Integer codigoId, Usuario usuario) {
+	public boolean cambiarPassword(Integer codigoId, UsuarioDTO usuario) {
+		
 		Optional<CodigoRecuperacion>codigo=codigoRecuperacionRepository.findById(codigoId);
 		if(codigo.isPresent()) {
+			
 			Optional<Usuario> usuarioCurrent=usuarioReporitory.findById(codigo.get().getUsuarioId());
 			if(usuarioCurrent.isPresent() ) {
 				Usuario usuarioReturn=usuarioCurrent.get();

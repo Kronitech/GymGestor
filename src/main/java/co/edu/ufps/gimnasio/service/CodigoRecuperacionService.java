@@ -8,7 +8,7 @@ public interface CodigoRecuperacionService {
 	public CodigoRecuperacion saveCodigoRecuperacion(CodigoRecuperacion codigoRecuperacion);
 	
 	public CodigoRecuperacion verificarCodigo(CodigoRecuperacion codigoRecuperacion,String email);
-	public boolean cambiarPassword(Integer codigoId,Usuario usuario);
+	public boolean cambiarPassword(Integer codigoId,UsuarioDTO usuario);
 	 
 	
 

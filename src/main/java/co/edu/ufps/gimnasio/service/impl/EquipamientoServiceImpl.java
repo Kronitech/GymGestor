@@ -42,6 +42,8 @@ public class EquipamientoServiceImpl implements EquipamientoService{
 		if(equipamientoCurrent.isPresent()) {
 			Equipamiento equipamientoReturn=equipamientoCurrent.get();
 			equipamientoReturn.setNombre(equipamiento.getNombre());
+			equipamientoReturn.setCantidad(equipamiento.getCantidad());
+			equipamientoReturn.setDisponibilidad(equipamiento.getDisponibilidad());
 			return equipamientoRepository.save(equipamientoReturn);
 		}
 		return null;

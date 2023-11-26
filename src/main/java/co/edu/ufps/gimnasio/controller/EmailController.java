@@ -38,6 +38,19 @@ public class EmailController {
 		
 		
 	}
+	@PreAuthorize("hasAnyRole('ADMIN' , 'RECEPCIONISTA')")
+	@PostMapping("/comprobante/{id}")
+	public ResponseEntity<?> correoComprobanteMembresia(@PathVariable Integer id){
+		
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED).body(mailService.membresiaNueva(id));
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		
+		
+	}
 	
 	@GetMapping("/recuperar/{email}")
 	public ResponseEntity<?> correoBienvenida(@PathVariable String email){

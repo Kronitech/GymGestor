@@ -16,6 +16,7 @@ public class UsuarioDTO {
 	private String telefono;
 	private String email;
 	private String foto;
+	private String password;
 	private Date fechaNacimiento;
 	private Date fechaRegistro;
 	private boolean estado;

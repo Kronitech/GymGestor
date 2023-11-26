@@ -16,6 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Entity
@@ -32,6 +34,7 @@ public class Usuario {
 	private String email;
 	@Column(nullable = true)
 	private String foto;
+	@JsonIgnore
 	private String password;
 	@Column(name="fecha_nacimiento")
 	private Date fechaNacimiento;

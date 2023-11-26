@@ -1,10 +1,13 @@
 package co.edu.ufps.gimnasio.service.impl;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +27,9 @@ import co.edu.ufps.gimnasio.repository.MembresiaRepository;
 import co.edu.ufps.gimnasio.repository.UsuarioMembresiaRepository;
 import co.edu.ufps.gimnasio.repository.UsuarioReporitory;
 import co.edu.ufps.gimnasio.service.UsuarioMembresiaService;
+import co.edu.ufps.gimnasio.util.ReporteGenerate;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
 public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
@@ -38,10 +44,18 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 	UsuarioReporitory usuarioReporitory;
 	@Autowired
 	ModelMapper modelMapper;
+	
+	@Autowired
+	ReporteGenerate reporteGenerate;
 
 	@Override
 	public List<UsuarioMembresia> lista() {
 		return usuarioMembresiaRepository.findAll();
+		/*
+		 * List<UsuarioMembresia>usuarios=usuarioMembresiaRepository.findAll();
+		List<UsuarioMembresiasDTO>lista=modelMapper.map(usuarios, new TypeToken<List<UsuarioMembresiasDTO>>() {}.getType());
+		return lista;
+		 */
 	}
 
 	@Override
@@ -58,7 +72,7 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 		Date fechaInicio = new Date();
 		Date fechaRegistro=new Date ();
 		
-		List<UsuarioMembresia>membresiasActivas=membresiasActivas(usuarioMembresia.getUsuarioId());
+		List<UsuarioMembresia>membresiasActivas=membresiasActivas(usuarioMembresia.getUsuarioId().getId());
 		if(!membresiasActivas.isEmpty()) {
 			int n=membresiasActivas.size();
 			
@@ -92,7 +106,9 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 	}
 	@Override
 	public List<UsuarioMembresia> membresiasActivas(Integer id) {
-		List<UsuarioMembresia> usuarioMembresias = usuarioMembresiaRepository.findByUsuarioId(id);
+		Usuario usuario=new Usuario();
+		usuario.setId(id);
+		List<UsuarioMembresia> usuarioMembresias = usuarioMembresiaRepository.findByUsuarioId(usuario);
 		Date fecha = new Date();
 		long fechaActual = fecha.getTime();
 		
@@ -157,7 +173,7 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 	        Set<Integer> usuariosAgregados = new HashSet<>();  // Usamos un conjunto para verificar duplicados
 
 	        for (UsuarioMembresia usuarioMembresia : membresiasDelEntrenador) {
-	            Optional<Usuario> usuario = usuarioReporitory.findById(usuarioMembresia.getUsuarioId());
+	            Optional<Usuario> usuario = usuarioReporitory.findById(usuarioMembresia.getUsuarioId().getId());
 	            if (usuario.isPresent()) {
 	                Integer usuarioId = usuario.get().getId();
 	                // Verificar si el usuario ya ha sido agregado a la lista
@@ -177,6 +193,71 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 	@Override
 	public List<UsuarioMembresia> membresiasUsuarioById(Integer id) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] informeMembresias(Date fechaInicio, Date fechaFin) throws JRException, FileNotFoundException {
+		List<UsuarioMembresia>lista=usuarioMembresiaRepository.findUsuariosMembresiaByFechaRegistro(fechaInicio, fechaFin);
+		if(lista.size()>0) {
+			
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		
+        params.put("tableDataset", new JRBeanCollectionDataSource(lista));
+        params.put("fechaInicio", fechaInicio);
+        params.put("fechaFin", fechaFin);
+        params.put("total",calcularSumaDePrecios(lista) );
+		return reporteGenerate.exportToPdf(params);
+		}else {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public byte[] informeMembresias() throws JRException, FileNotFoundException{
+		
+		List<UsuarioMembresia>lista=usuarioMembresiaRepository.findAll();
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		
+        params.put("tableDataset", new JRBeanCollectionDataSource(lista));
+        params.put("fechaInicio", null);
+        params.put("fechaFin", new Date());
+        params.put("total",calcularSumaDePrecios(lista) );
+		return reporteGenerate.exportToPdf(params);
+	}
+	// Método para calcular la suma de precios
+	private int calcularSumaDePrecios(List<UsuarioMembresia> lista) {
+	    return lista.stream()
+	            .mapToInt(UsuarioMembresia::getPrecio)
+	            .sum();
+	}
+
+	@Override
+	public byte[] comprobantePago(Integer id) throws JRException, FileNotFoundException {
+		Optional<UsuarioMembresia>usuaarioMembresia=usuarioMembresiaRepository.findById(id);
+		if(usuaarioMembresia.isPresent()) {
+			
+			Optional<Membresia> membresia=membresiaRepository.findById(usuaarioMembresia.get().getMembresiaId());
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("clienteNombre", usuaarioMembresia.get().getUsuarioId().getNombre());
+			params.put("clienteCedula", usuaarioMembresia.get().getUsuarioId().getCedula());
+
+			params.put("clienteEmail", usuaarioMembresia.get().getUsuarioId().getEmail());
+			params.put("vendedorNombre", usuaarioMembresia.get().getVendedorId().getNombre());
+			params.put("vendedorCedula", usuaarioMembresia.get().getVendedorId().getCedula());
+			params.put("vendedorEmail", usuaarioMembresia.get().getVendedorId().getEmail());
+			params.put("membresia", membresia.get().getNombre());
+			params.put("descripcion", membresia.get().getDescripcion());
+			params.put("fechaInicio", usuaarioMembresia.get().getFechaInicio());
+			params.put("fechaFin", usuaarioMembresia.get().getFechaFin());
+			params.put("precio", usuaarioMembresia.get().getPrecio());
+			
+			return reporteGenerate.comprobantePago(params);
+		}
 		return null;
 	}
 

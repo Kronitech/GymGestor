@@ -51,7 +51,6 @@ public class UsuarioController {
 		}
 		
 	}
-	@PreAuthorize("hasAnyRole('ADMIN' , 'RECEPCIONISTA')")
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?>updateCliente(@PathVariable Integer id, @RequestBody Usuario usuario){
 		try {

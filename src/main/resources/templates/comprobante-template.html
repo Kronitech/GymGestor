@@ -15,7 +15,8 @@
 		style="background-color: #f2f2f2; border-top: 2px solid #dddddd; font-size: 14px; padding: 10px; text-align: center; width: auto;">
 
 		<h1 style="text-align: center;" th:text="${titulo}"></h1>
-		<p th:text="'Mejora tu salud y bienestar con nosotros.' " style="font-style: italic; margin-top: 5px;"></p>
+		<p th:text="'Mejora tu salud y bienestar con nosotros.' "
+			style="font-style: italic; margin-top: 5px;"></p>
 	</header>
 	<div class="container" style="padding: 3; text-align: center;">
 
@@ -27,16 +28,22 @@
 
 
 		<h3 th:text="${detalle}"></h3>
-		<h1 th:text="'CODIGO:' "></h1>
+		<table style="border-collapse: collapse; width: auto; margin: 0 auto; border: 2px solid #333;">
+    <tr style="border: 2px solid #333;">
+        <td style="border: 2px solid #333; padding: 10px; background-color: #f2f2f2; text-align: right; font-family: monospace; font-size: 38px; line-height: 1.5em;">Fecha Inicio</td>
+        <td style="border: 2px solid #333; padding: 10px; background-color: #f2f2f2;">
+            <span th:text="${fechaInicio}" style="font-family: monospace; font-size: 38px; line-height: 1.5em;"></span>
+        </td>
+    </tr>
+    <tr style="border: 2px solid #333;">
+        <td style="border: 2px solid #333; padding: 10px; background-color: #f2f2f2; text-align: right; font-family: monospace; font-size: 38px; line-height: 1.5em;">Fecha Fin</td>
+        <td style="border: 2px solid #333; padding: 10px; background-color: #f2f2f2;">
+            <span th:text="${fechaFin}" style="font-family: monospace; font-size: 38px; line-height: 1.5em;"></span>
+        </td>
+    </tr>
+</table>
 
-		<h1 th:text="${docente.password}" style="font-family: monospace; font-size: 48px; line-height: 1.5em; background-color: #f2f2f2; padding: 10px; border: 1px solid #dddddd; display: inline-block;">
-  <span style="border-left: 1px solid black; padding-left: 10px;">1</span>
-  <span style="border-left: 1px solid black; padding: 0 10px;">2</span>
-  <span style="border-left: 1px solid black; padding-right: 10px;">3</span>
-  <span style="border-left: 1px solid black; padding-left: 10px;">4</span>
-  <span style="border-left: 1px solid black; padding: 0 10px;">5</span>
-  <span style="padding-right: 10px;">6</span>
-</h1>
+
 
 		<br></br>
 
@@ -57,7 +64,9 @@
 		<p>Colombia</p>
 
 	</footer>
-	
+	<!-- <img
+		src="https://cquintero99.github.io/incidentes_frontend/img/Reporte%20de%20Incidentes.jpg"
+		alt="Logo del sitio web DAFACI" style="width: 800px;"></img> -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"

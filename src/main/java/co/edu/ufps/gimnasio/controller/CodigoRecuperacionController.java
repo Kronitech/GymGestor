@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.edu.ufps.gimnasio.model.dto.UsuarioDTO;
 import co.edu.ufps.gimnasio.model.entity.CodigoRecuperacion;
 import co.edu.ufps.gimnasio.model.entity.Usuario;
 import co.edu.ufps.gimnasio.service.CodigoRecuperacionService;
@@ -32,7 +33,7 @@ public class CodigoRecuperacionController {
 		}
 	}
 	@PostMapping("/codigo/{id}")
-	public ResponseEntity<?> validarCodigo(@PathVariable Integer id,@RequestBody Usuario usuario){
+	public ResponseEntity<?> validarCodigo(@PathVariable Integer id,@RequestBody UsuarioDTO usuario){
 		try {
 			return ResponseEntity.ok(codigoRecuperacionService.cambiarPassword(id, usuario));
 		} catch (Exception e) {

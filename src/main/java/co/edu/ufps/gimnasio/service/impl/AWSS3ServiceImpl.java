@@ -43,6 +43,7 @@ public class AWSS3ServiceImpl implements AWSS3Service {
 	public String uploadFile(String ruta, MultipartFile file) {
 		String folderKey = ruta.endsWith("/") ? ruta : ruta + "/";
 		String newFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+		
 		LOGGER.info("Subiendo archivo con el nombre... " + newFileName);
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentLength(file.getSize());
@@ -50,6 +51,7 @@ public class AWSS3ServiceImpl implements AWSS3Service {
 		try (InputStream inputStream = file.getInputStream()) {
 			PutObjectRequest request = new PutObjectRequest(bucketName, folderKey + newFileName, inputStream, metadata);
 			amazonS3.putObject(request);
+			
 			return newFileName;
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);

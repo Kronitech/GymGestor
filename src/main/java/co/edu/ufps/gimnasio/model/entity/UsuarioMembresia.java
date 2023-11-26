@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -19,14 +21,16 @@ public class UsuarioMembresia {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@Column(name="usuario_id")
-	private Integer usuarioId;
+	@ManyToOne
+	@JoinColumn(name="usuario_id")
+	private Usuario usuarioId;
 	@Column(name="membresia_id")
 	private Integer membresiaId;
 	@Column(name="entrenador_id")
 	private Integer entrenadorId;
-	@Column(name="vendedor_id")
-	private Integer vendedorId;
+	@ManyToOne
+	@JoinColumn(name="vendedor_id")
+	private Usuario vendedorId;
 	private Integer precio;
 	private Date fechaInicio;
 	private Date fechaFin;

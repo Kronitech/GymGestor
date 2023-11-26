@@ -16,5 +16,7 @@ public class Equipamiento {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nombre;
+	private Integer cantidad;
+	private Boolean disponibilidad;
 
 }

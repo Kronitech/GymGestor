@@ -11,8 +11,10 @@ import co.edu.ufps.gimnasio.model.entity.Usuario;
 import co.edu.ufps.gimnasio.model.entity.UsuarioMembresia;
 
 public interface UsuarioMembresiaRepository extends JpaRepository<UsuarioMembresia, Integer> {
-	List<UsuarioMembresia> findByUsuarioId(Integer usuarioId);
+	List<UsuarioMembresia> findByUsuarioId(Usuario usuario);
 	
 	 @Query("SELECT um FROM UsuarioMembresia um WHERE um.fechaFin >= :fechaFin")
 	    List<UsuarioMembresia> findUsuariosMembresiaByFechaFin(@Param("fechaFin") Date fechaFin);
+	 @Query("SELECT um FROM UsuarioMembresia um WHERE um.fechaRegistro >= :fechaInicio AND um.fechaRegistro <= :fechaFin")
+	    List<UsuarioMembresia> findUsuariosMembresiaByFechaRegistro(@Param("fechaInicio") Date fechaInicio,@Param("fechaFin") Date fechaFin);
 }
