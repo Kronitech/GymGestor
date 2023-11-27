@@ -52,7 +52,7 @@ public class MailService {
 				// GENERO CODIGO DE REGISTRO
 
 				// TITULO DEL EMAIL
-				String titulo = "SMART FIT";
+				String titulo = "ENERGY TIME";
 				// DESCRIPCION
 				String detalle = "Bienvenido , su cuenta se activo con exito ya puedes iniciar sesion en nuestro sitio web ";
 				// FECHA GENERA EL EMAIL
@@ -69,7 +69,7 @@ public class MailService {
 				context.setVariable("fecha", fechaFormateada);
 				String htmlContent = templateEngine.process("email-template", context);
 				messageHelper.setTo(usuario.get().getEmail());
-				messageHelper.setSubject("SMART FIT CORREO REGISTRO");
+				messageHelper.setSubject("ENERGY TIME CORREO REGISTRO");
 				// messageHelper.setFrom("MENSAJE DE BIENVENIDA");
 				messageHelper.setText(htmlContent, true);
 				// CREO OBJ CODIGOREGISTRO
@@ -97,7 +97,7 @@ public class MailService {
 				// GENERO CODIGO DE REGISTRO
 
 				// TITULO DEL EMAIL
-				String titulo = "SMART FIT";
+				String titulo = "ENERGY TIME";
 				// DESCRIPCION
 				String detalle = "Su membresia se activo con exito ya puedes disfurtar de todos los beneficios ";
 				// FECHA GENERA EL EMAIL
@@ -116,7 +116,7 @@ public class MailService {
 				context.setVariable("fecha", fechaFormateada);
 				String htmlContent = templateEngine.process("comprobante-template", context);
 				messageHelper.setTo(usuario.getUsuarioId().getEmail());
-				messageHelper.setSubject("SMART FIT COMPROBANTE DE MEMBRESIA");
+				messageHelper.setSubject("ENERGY TIME COMPROBANTE DE MEMBRESIA");
 				// messageHelper.setFrom("MENSAJE DE BIENVENIDA");
 				messageHelper.setText(htmlContent, true);
 
@@ -160,7 +160,7 @@ public class MailService {
 				int codigo = generarCodigo(6);
 				usuario.get().setPassword(codigo + "");
 				// TITULO DEL EMAIL
-				String titulo = "SMART FIT";
+				String titulo = "ENERGY TIME";
 				// DESCRIPCION
 				String detalle = "El siguiente codigo es para completar el proceso de recuperar contraseña y  habilitar su cuenta ";
 				// FECHA GENERA EL EMAIL
@@ -177,7 +177,7 @@ public class MailService {
 				context.setVariable("fecha", fechaFormateada);
 				String htmlContent = templateEngine.process("email-password", context);
 				messageHelper.setTo(usuario.get().getEmail());
-				messageHelper.setSubject("RECUPERAR CONTRASEÑA  ");
+				messageHelper.setSubject("ENERGY TIME RECUPERAR CONTRASEÑA  ");
 				messageHelper.setText(htmlContent, true);
 				// CREO OBJ CODIGOREGISTRO
 				// Genera un token único

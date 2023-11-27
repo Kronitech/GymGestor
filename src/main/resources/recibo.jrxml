@@ -45,7 +45,7 @@
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<text><![CDATA[Date:]]></text>
+				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="465" y="10" width="84" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
@@ -81,14 +81,14 @@
 				<textElement>
 					<font fontName="SansSerif" size="19" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Your company name]]></text>
+				<text><![CDATA[ENERGY TIME]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="95" y="25" width="205" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde"/>
 				<textElement>
 					<font fontName="SansSerif"/>
 				</textElement>
-				<text><![CDATA[Street address]]></text>
+				<text><![CDATA[Cúcuta , Colombia]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="140" width="94" height="25" uuid="fcd79023-7165-4037-96d7-710ec2f15592">
