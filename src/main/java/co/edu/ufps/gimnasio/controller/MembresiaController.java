@@ -35,6 +35,15 @@ public class MembresiaController {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Error listar membresias");
 		}
 	}
+	@GetMapping("/activas")
+	public ResponseEntity<?>listaActivas(){
+		try {
+			return ResponseEntity.ok(membresiaService.membresiasActivas());
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Error listar membresias");
+		}
+	}
 	@GetMapping("/{id}")
 	public ResponseEntity<?>findById(@PathVariable Integer id){
 		try {
@@ -69,7 +78,7 @@ public class MembresiaController {
 	public ResponseEntity<?>deleteById(@PathVariable Integer id){
 		try {
 			membresiaService.deleteById(id);
-			return ResponseEntity.ok("Eliminado");
+			return ResponseEntity.ok(true);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Error encontrar membresia");

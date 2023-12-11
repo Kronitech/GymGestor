@@ -45,14 +45,13 @@ public class RutinaServiceImpl implements RutinaService {
 
 	@Override
 	public Rutina saveRutina(RutinaDTO rutina) {
-		System.err.print(rutina.toString());
 		ModelMapper modelMapper = new ModelMapper();
 		Rutina rutinaCurrent = modelMapper.map(rutina, Rutina.class);
 		rutinaCurrent.setEjercicios(null);
+		rutinaCurrent.setNombre(rutinaCurrent.getNombre().toUpperCase());
 		Rutina rutinaReturn = rutinaRepository.save(rutinaCurrent);
 
 		List<Ejercicio> ejercicios = rutina.getEjercicios();
-		System.err.print(rutina.getEjercicios().size());
 		for (Ejercicio ejercicio : ejercicios) {
 
 			RutinaEjercicio rutinaEjercicio = new RutinaEjercicio();
@@ -73,7 +72,7 @@ public class RutinaServiceImpl implements RutinaService {
 			rutinaReturn.setNombre(rutina.getNombre());
 			rutinaReturn.setDescripcion(rutina.getDescripcion());
 			rutinaReturn.setDuracion(rutina.getDuracion());
-
+			rutinaReturn.setMusculo(rutina.getMusculo());
 			List<Ejercicio> ejercicios = rutina.getEjercicios();
 
 			List<RutinaEjercicio> ejerciciosOld = rutinaEjercicioRepository.findByRutinaId(rutina.getId());

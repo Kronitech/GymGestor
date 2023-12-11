@@ -31,6 +31,7 @@ public class Rutina {
 	@Column(name="descripcion" ,columnDefinition = "TEXT")
 	private String descripcion;
 	private String duracion;
+	private String musculo;
 	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinTable(name="rutina_ejercicio",joinColumns = @JoinColumn(name="rutina_id",referencedColumnName = "id"),inverseJoinColumns = @JoinColumn(name="ejercicio_id",referencedColumnName = "id"))
 	private List<Ejercicio>ejercicios=new  ArrayList<>();

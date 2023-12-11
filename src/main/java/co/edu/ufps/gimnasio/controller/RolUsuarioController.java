@@ -30,5 +30,16 @@ public class RolUsuarioController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El rol no existe");
 		}
 	}
+	@PreAuthorize("hasAnyRole('ADMIN' , 'CLIENTE')")
+	@GetMapping("/entrenadores")
+	public ResponseEntity<?> listaUsuarioEntrenador(){
+		try {
+			int id=3;
+			return ResponseEntity.ok(rolUsuarioService.listaRol(id));
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El rol no existe");
+		}
+	}
 	
 }

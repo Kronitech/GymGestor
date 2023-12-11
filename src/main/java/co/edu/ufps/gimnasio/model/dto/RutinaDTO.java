@@ -13,6 +13,7 @@ public class RutinaDTO {
 	private String nombre;
 	private String descripcion;
 	private String duracion;
+	private String musculo;
 	private List<Ejercicio>ejercicios;
 
 }

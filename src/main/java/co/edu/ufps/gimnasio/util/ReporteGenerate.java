@@ -1,5 +1,6 @@
 package co.edu.ufps.gimnasio.util;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -89,3 +90,4 @@ public class ReporteGenerate {
 	    }
 	    */
 }
+

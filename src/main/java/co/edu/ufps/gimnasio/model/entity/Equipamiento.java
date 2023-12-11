@@ -17,6 +17,6 @@ public class Equipamiento {
 	private Integer id;
 	private String nombre;
 	private Integer cantidad;
-	private Boolean disponibilidad;
+	private Integer disponibilidad;
 
 }

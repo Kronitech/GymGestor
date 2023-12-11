@@ -63,7 +63,7 @@ public class UsuarioServiceImpl  implements UsuarioService{
 		if(usuarioCurrent.isPresent()) {
 			 Usuario usuarioReturn=usuarioCurrent.get();
 			 usuarioReturn.setCedula(usuario.getCedula());
-			 //usuarioReturn.setEmail(usuario.getEmail());
+			 usuarioReturn.setEmail(usuario.getEmail());
 			 usuarioReturn.setNombre(usuario.getNombre());
 			 usuarioReturn.setTelefono(usuario.getTelefono());
 			 usuarioReturn.setFechaNacimiento(usuario.getFechaNacimiento());

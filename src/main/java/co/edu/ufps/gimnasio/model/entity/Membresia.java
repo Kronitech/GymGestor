@@ -19,5 +19,6 @@ public class Membresia {
 	private Integer duracion;
 	private Integer precio;
 	private String descripcion;
+	private Boolean estado;
 
 }

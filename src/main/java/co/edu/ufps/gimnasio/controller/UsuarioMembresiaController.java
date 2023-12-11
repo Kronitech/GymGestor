@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +44,15 @@ public class UsuarioMembresiaController {
 	public ResponseEntity<?> membresiasActivas(@PathVariable Integer usuarioId) {
 		try {
 			return ResponseEntity.ok(usuarioMembresiaService.membresiasActivas(usuarioId));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No se encontro listado");
+		}
+	}
+	@PreAuthorize("hasAnyRole('ADMIN' , 'RECEPCIONISTA','CLIENTE')")
+	@PutMapping("/update/{id}")
+	public ResponseEntity<?> membresiasUpdate(@RequestBody UsuarioMembresia usuarioMembresia,@PathVariable Integer id) {
+		try {
+			return ResponseEntity.ok(usuarioMembresiaService.updateUsuarioMembresia(usuarioMembresia,id));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No se encontro listado");
 		}

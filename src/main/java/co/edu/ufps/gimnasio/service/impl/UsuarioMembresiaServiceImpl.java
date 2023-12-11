@@ -95,7 +95,16 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
 
 	@Override
 	public UsuarioMembresia updateUsuarioMembresia(UsuarioMembresia usuarioMembresia, Integer id) {
-		// TODO Auto-generated method stub
+		
+		Optional<UsuarioMembresia>usuarioMembresiaCurrenOptional=usuarioMembresiaRepository.findById(usuarioMembresia.getId());
+		if(usuarioMembresiaCurrenOptional.isPresent()) {
+			Optional<Entrenador>entrenador=entrenadorReposiotry.findByUsuarioId(id);
+			if(entrenador.isPresent()) {
+				UsuarioMembresia usuarioReturn=usuarioMembresiaCurrenOptional.get();
+				usuarioReturn.setEntrenadorId(entrenador.get().getId());
+				return usuarioMembresiaRepository.save(usuarioReturn);
+			}
+		}
 		return null;
 	}
 

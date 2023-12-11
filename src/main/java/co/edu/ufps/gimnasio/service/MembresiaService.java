@@ -8,6 +8,8 @@ public interface MembresiaService {
 	
 	public List<Membresia>membresias();
 	
+	public List<Membresia>membresiasActivas();
+	
 	public Membresia finByIdMembresia(Integer id);
 	
 	public Membresia saveMembresia(Membresia membresia);

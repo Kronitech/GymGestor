@@ -32,7 +32,7 @@ public class MembresiaServiceImpl implements MembresiaService{
 
 	@Override
 	public Membresia saveMembresia(Membresia membresia) {
-		
+		membresia.setNombre(membresia.getNombre().toUpperCase());
 		
 		return membresiaRepository.save(membresia);
 	}
@@ -46,6 +46,7 @@ public class MembresiaServiceImpl implements MembresiaService{
 			membresiaReturn.setDuracion(membresia.getDuracion());
 			membresiaReturn.setNombre(membresia.getNombre());
 			membresiaReturn.setPrecio(membresia.getPrecio());
+			membresiaReturn.setEstado(membresia.getEstado());
 			return membresiaRepository.save(membresiaReturn);
 			
 		}
@@ -59,6 +60,12 @@ public class MembresiaServiceImpl implements MembresiaService{
 			membresiaRepository.deleteById(id);
 		}
 		
+	}
+
+	@Override
+	public List<Membresia> membresiasActivas() {
+		
+		return membresiaRepository.findByEstado(true);
 	}
 
 }
