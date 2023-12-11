@@ -12,11 +12,18 @@ import co.edu.ufps.gimnasio.model.entity.RutinaEjercicio;
 
 public interface RutinaEjercicioRepository extends JpaRepository<RutinaEjercicio, Integer>{
 	
+	
 	List<RutinaEjercicio> findByRutinaId(Integer rutinaId);
 	@Modifying
     @Transactional
     @Query("DELETE FROM RutinaEjercicio ee WHERE ee.rutinaId = :rutinaId AND ee.ejercicioId = :ejercicioId")
    
 	void deleteByRutinaIdAndEjercicioId(Integer rutinaId,Integer ejercicioId);
+	
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM RutinaEjercicio ee WHERE ee.rutinaId = :rutinaId")
+    void deleteByRutinaId(Integer rutinaId);
 
 }

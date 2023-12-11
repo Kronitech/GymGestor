@@ -15,8 +15,10 @@ import co.edu.ufps.gimnasio.model.entity.EjercicioEquipamiento;
 import co.edu.ufps.gimnasio.model.entity.Equipamiento;
 import co.edu.ufps.gimnasio.model.entity.Rutina;
 import co.edu.ufps.gimnasio.model.entity.RutinaEjercicio;
+import co.edu.ufps.gimnasio.model.entity.UsuarioRutina;
 import co.edu.ufps.gimnasio.repository.RutinaEjercicioRepository;
 import co.edu.ufps.gimnasio.repository.RutinaRepository;
+import co.edu.ufps.gimnasio.repository.UsuarioRutinaRepository;
 import co.edu.ufps.gimnasio.service.RutinaService;
 
 @Service
@@ -28,10 +30,12 @@ public class RutinaServiceImpl implements RutinaService {
 	RutinaRepository rutinaRepository;
 	@Autowired
 	RutinaEjercicioRepository rutinaEjercicioRepository;
+	@Autowired
+	UsuarioRutinaRepository usuarioRutinaRepository;
 
 	@Override
 	public List<Rutina> finAllRutinas() {
-		return rutinaRepository.findAll();
+		return rutinaRepository.findByEstado(true);
 	}
 
 	@Override
@@ -49,6 +53,7 @@ public class RutinaServiceImpl implements RutinaService {
 		Rutina rutinaCurrent = modelMapper.map(rutina, Rutina.class);
 		rutinaCurrent.setEjercicios(null);
 		rutinaCurrent.setNombre(rutinaCurrent.getNombre().toUpperCase());
+		rutinaCurrent.setEstado(true);
 		Rutina rutinaReturn = rutinaRepository.save(rutinaCurrent);
 
 		List<Ejercicio> ejercicios = rutina.getEjercicios();
@@ -87,23 +92,23 @@ public class RutinaServiceImpl implements RutinaService {
 					.collect(Collectors.toList());
 
 			// Identificar equipamientos a eliminar (antiguos)
-			List<Integer> ejerciciosEliminar = ejerciciosOldIds.stream()
-					.filter(id -> !nuevosEjerciciosIds.contains(id)).collect(Collectors.toList());
-			
+			List<Integer> ejerciciosEliminar = ejerciciosOldIds.stream().filter(id -> !nuevosEjerciciosIds.contains(id))
+					.collect(Collectors.toList());
+
 			// Eliminar equipamientos antiguos
 			for (Integer integer : ejerciciosEliminar) {
-				
+
 				rutinaEjercicioRepository.deleteByRutinaIdAndEjercicioId(rutina.getId(), integer);
 			}
-			
+
 			for (Integer integer : ejerciciosNuevos) {
-				RutinaEjercicio ejercicio=new RutinaEjercicio();
+				RutinaEjercicio ejercicio = new RutinaEjercicio();
 				ejercicio.setEjercicioId(integer);
 				ejercicio.setRutinaId(rutina.getId());
 				rutinaEjercicioRepository.save(ejercicio);
 			}
 			return rutinaRepository.save(rutinaReturn);
-			
+
 		}
 		// TODO Auto-generated method stub
 		return null;
@@ -111,8 +116,32 @@ public class RutinaServiceImpl implements RutinaService {
 
 	@Override
 	public Rutina deleteRutina(Integer id) {
-		// TODO Auto-generated method stub
+
+		Optional<Rutina> rutina = rutinaRepository.findById(id);
+		if (rutina.isPresent()) {
+
+				eliminarUsuarios(rutina.get()); 
+				Rutina rutinaReturn=rutina.get();
+				rutinaReturn.setNombre(rutinaReturn.getNombre()+"-"+rutinaReturn.getId());
+				rutinaReturn.setEstado(false);
+				rutinaRepository.save(rutinaReturn);
+				return rutina.get();
+		
+
+		}
 		return null;
+	}
+
+	
+
+	public Boolean eliminarUsuarios(Rutina rutina) {
+		List<UsuarioRutina> usuarios = usuarioRutinaRepository.findByRutinaId(rutina);
+
+		if (!usuarios.isEmpty()) {
+
+			usuarioRutinaRepository.deleteAll(usuarios);
+		}
+		return true;
 	}
 
 }
